@@ -1,6 +1,8 @@
 import csv
 import random
 
+
+
 def zaczytaj_plik(sciezka):
     dane =[]
     file = open(sciezka, "r")
@@ -47,10 +49,6 @@ def wyswietl_dane(zaczytane, od=1, do=-1):
 
 
 def podziel_dataset(zaczytane, a, b, c):
-    
-    trening = []
-    test = []
-    walidacja = []
     random.shuffle(zaczytane)
     liczebność_a = round(a*len(zaczytane))
     liczebność_b = round(b*len(zaczytane))
@@ -78,9 +76,10 @@ def wyswietl_klase(zaczytane, numer_kolumny, nazwa):
 
 
 def zapisz_liste(lista, sciezka):
-    import pandas as pd
-    if not isinstance(lista, pd.DataFrame):
-        pd.DataFrame(lista)
+    import pandas as pd   
+    print(type(lista))
+    lista = pd.DataFrame(list(lista))  
+    print(type(lista))  
     lista.to_excel(sciezka)
 
 
@@ -92,9 +91,7 @@ def uruchom_menu():
     sciezka = None
     etykiety_w_pliku = None
     uruchom = 1
-    trening = []
-    test=[]
-    walidacja=[]
+    global trening ,test,  walidacja 
     print("Witaj w programie")
     print("Podaj scieżkę")
     sciezka = input("Ścieżka: ")
@@ -122,7 +119,7 @@ def uruchom_menu():
             walidacyjny = float(input("Zbiór walidacyjny: "))
             trening, test, walidacja = podziel_dataset(dane_z_pliku, treningowy, testowy, walidacyjny)
             print("Zbiory danych dostępnę są jako listy o nazwach: trening, walidacja, test")
-
+         
 
         if panel == "D":
             print('Podaj liczbę kolumny, w której znajduje się klasa')
@@ -144,19 +141,20 @@ def uruchom_menu():
             zapisz_liste(nazwa_listy, scieżka_do_zapisu)
 
         if panel =="Q":
+            print(trening)
             uruchom = 0
     
 
 
 
-#x = zaczytaj_plik(r"C:\Users\micha\Downloads\iris.csv")
-#y = pobierz_dane(x)
-# # # # pokaz_etykiety(x)
-# # # # wyswietl_dane(x)
-#trening, test, walidacja = podziel_dataset(y, 0.1, 0.2, 0.7)
-# # # # liczba_klas(x,4) #deklarujemy numer kolumny w której znajdują się klasie
-# # # # wyswietl_klase(x,4, "versicolor")
-# # # # zapisz_liste(trening, r"C:\Users\micha\OneDrive\Dokumenty\test1.xlsx")
-#print(test)
+# x = zaczytaj_plik(r"C:\Users\micha\Downloads\iris.csv")
+# y = pobierz_dane(x)
+# # # # # pokaz_etykiety(x)
+# # # # # wyswietl_dane(x)
+# trening, test, walidacja = podziel_dataset(y, 0.4, 0.4, 0.2)
+# # # # # liczba_klas(x,4) #deklarujemy numer kolumny w której znajdują się klasie
+# # # # # wyswietl_klase(x,4, "versicolor")
+# # # # # zapisz_liste(trening, r"C:\Users\micha\OneDrive\Dokumenty\test1.xlsx")
+# print(test)
 
 uruchom_menu()
