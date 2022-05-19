@@ -1,10 +1,10 @@
+from ast import If
 import csv
 import random
 
 
-
 def zaczytaj_plik(sciezka):
-    dane =[]
+    dane = []
     file = open(sciezka, "r")
     return csv.reader(file)
 
@@ -18,21 +18,6 @@ def pobierz_dane(plik_csv):
     for wiersz in plik_csv:
         dane.append(wiersz)
     return dane
-
-# def zaczytaj(sciezka, czy_etykiety):
-#     dane = []
-#     file = open(sciezka, "r")
-#     plik_csv = csv.reader(file)
-#     etykiety = []
-
-#     if czy_etykiety == True:
-#         etykiety = next(plik_csv)
-
-#     for wiersz in plik_csv:
-#         dane.append(wiersz)
-#     liczba_wierszy = len(dane)
-#     file.close
-#     return etykiety, dane, liczba_wierszy
 
 
 def pokaz_etykiety(zaczytane):
@@ -55,7 +40,7 @@ def podziel_dataset(zaczytane, a, b, c):
     liczebność_c = round(c*len(zaczytane))
     trening = zaczytane[1:liczebność_a]
     test = zaczytane[liczebność_a:liczebność_a+liczebność_b]
-    walidacja = zaczytane[liczebność_a+liczebność_b:liczebność_a+liczebność_b+liczebność_c]
+    walidacja = zaczytane[liczebność_a + liczebność_b:liczebność_a+liczebność_b+liczebność_c]
     return trening, test, walidacja
 
 
@@ -73,31 +58,38 @@ def wyswietl_klase(zaczytane, numer_kolumny, nazwa):
     for x in range(1, len(zaczytane)):
         if zaczytane[x][numer_kolumny] == nazwa:
             print(zaczytane[x])
+        # else: print("Taka nazwa klasy nie istnieje!")
 
 
 def zapisz_liste(lista, sciezka):
-    import pandas as pd   
-    print(type(lista))
-    lista = pd.DataFrame(list(lista))  
-    print(type(lista))  
+    import pandas as pd
+    lista = pd.DataFrame(list(lista))
     lista.to_excel(sciezka)
 
 
 def uruchom_menu():
-
 
     etykiety = None
     dane_z_pliku = None
     sciezka = None
     etykiety_w_pliku = None
     uruchom = 1
-    global trening ,test,  walidacja 
+    global trening, test,  walidacja
     print("Witaj w programie")
     print("Podaj scieżkę")
     sciezka = input("Ścieżka: ")
     csv_file = zaczytaj_plik(sciezka)
-    etykiety_w_pliku = input("Czy w pliku sa etykiety? [T/N]: ")
 
+    while True:
+                    
+        etykiety_w_pliku = input("Czy w pliku sa etykiety? [T/N]: ")
+                    
+        if etykiety_w_pliku != "T" and etykiety_w_pliku != "N":
+            print("Wpisz wartość T lub N")
+            continue
+        else:
+            break
+   
     if etykiety_w_pliku == "T":
         etykiety = pobierz_etykiety(csv_file)
 
@@ -114,12 +106,22 @@ def uruchom_menu():
 
         if panel == "C":
             print("Podaj procentową liczebność zbioru treningowego,testowego i walidacyjnego")
-            treningowy = float(input("Zbiór treningowy: "))
-            testowy = float(input("Zbiór testowy: "))
-            walidacyjny = float(input("Zbiór walidacyjny: "))
-            trening, test, walidacja = podziel_dataset(dane_z_pliku, treningowy, testowy, walidacyjny)
-            print("Zbiory danych dostępnę są jako listy o nazwach: trening, walidacja, test")
-         
+            
+            while True:
+                try:
+                    treningowy = float(input("Zbiór treningowy: "))
+                    testowy = float(input("Zbiór testowy: "))
+                    walidacyjny = float(input("Zbiór walidacyjny: "))
+                except ValueError:
+                    print("Wpisz wartość liczbową")
+                    continue
+                else:
+                    break
+                     
+            if treningowy+ testowy + walidacyjny <= 1:
+                trening, test, walidacja = podziel_dataset(dane_z_pliku, treningowy, testowy, walidacyjny)
+                print("Zbiory danych dostępnę są jako listy o nazwach: trening, walidacja, test")
+            else: print("Suma współczynników przekracza 1!")
 
         if panel == "D":
             print('Podaj liczbę kolumny, w której znajduje się klasa')
@@ -134,17 +136,24 @@ def uruchom_menu():
             wyswietl_klase(dane_z_pliku, numer_kolumny, nazwa_klasy)
 
         if panel == "F":
-            print("Podaj listę, którą chcesz zapisać")
-            nazwa_listy = input("Nazwa listy: ")
+            zbior = input(
+                "Podaj listę, którą chcesz zapisać: \n Wpisz 1 - zbiór walidacyjny,\n 2 - zbiór testowy, \n 3 - zbiór treningowy")
+            print(zbior)
+            if zbior == '1':
+                nazwa_listy = walidacja
+            elif zbior == '2':
+                nazwa_listy = test
+            elif zbior == '3':
+                nazwa_listy = trening
+            else:
+                print("błędna deklaracja")
             print("Podaj ścieżkę do zapisu")
             scieżka_do_zapisu = input("Ścieżka: ")
             zapisz_liste(nazwa_listy, scieżka_do_zapisu)
 
-        if panel =="Q":
+        if panel == "Q":
             print(trening)
             uruchom = 0
-    
-
 
 
 # x = zaczytaj_plik(r"C:\Users\micha\Downloads\iris.csv")
@@ -156,5 +165,4 @@ def uruchom_menu():
 # # # # # wyswietl_klase(x,4, "versicolor")
 # # # # # zapisz_liste(trening, r"C:\Users\micha\OneDrive\Dokumenty\test1.xlsx")
 # print(test)
-
 uruchom_menu()
