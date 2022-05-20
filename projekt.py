@@ -1,4 +1,3 @@
-from ast import If
 import csv
 import random
 
@@ -96,7 +95,7 @@ def uruchom_menu():
     dane_z_pliku = pobierz_dane(csv_file)
 
     while uruchom == 1:
-        panel = input("Co chcesz zrobić? \n Wpisz 'A', żeby wyswietlić wtykiety \n Wpisz 'B', żeby wyświetlić dane \n Wpisz 'C', żeby podzielić dataset \n Wpisz 'D', żeby uzyskać informacją na temat liczby klas i ich liczebnośc \n Wpisz 'E', żeby wyswetlić dane dla podanej klasy \n Wpisz 'F', zeby zapisać dowolną listę \n Wpisz 'Q', żeby wyjść z konsoli \n")
+        panel = input("Co chcesz zrobić? \n Wpisz 'A', żeby wyswietlić etykiety \n Wpisz 'B', żeby wyświetlić dane \n Wpisz 'C', żeby podzielić dataset \n Wpisz 'D', żeby uzyskać informacją na temat liczby klas i ich liczebnośc \n Wpisz 'E', żeby wyswetlić dane dla podanej klasy \n Wpisz 'F', zeby zapisać listę \n Wpisz 'Q', żeby wyjść z konsoli \n")
 
         if panel == "A":
             print(etykiety)
@@ -152,17 +151,8 @@ def uruchom_menu():
             zapisz_liste(nazwa_listy, scieżka_do_zapisu)
 
         if panel == "Q":
-            print(trening)
             uruchom = 0
 
 
-# x = zaczytaj_plik(r"C:\Users\micha\Downloads\iris.csv")
-# y = pobierz_dane(x)
-# # # # # pokaz_etykiety(x)
-# # # # # wyswietl_dane(x)
-# trening, test, walidacja = podziel_dataset(y, 0.4, 0.4, 0.2)
-# # # # # liczba_klas(x,4) #deklarujemy numer kolumny w której znajdują się klasie
-# # # # # wyswietl_klase(x,4, "versicolor")
-# # # # # zapisz_liste(trening, r"C:\Users\micha\OneDrive\Dokumenty\test1.xlsx")
-# print(test)
+
 uruchom_menu()
